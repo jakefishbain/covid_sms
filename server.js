@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const utils = require('./utils')
+
 
 require('./cronjob').start()
 require('custom-env').env();
@@ -20,8 +22,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-app.get("/", async (req, res) =>  {
-	res.json({ message: 'hi' });
+app.get("/sendit", async (req, res) =>  {
+  utils.getAndSend()
+  // res.json({ message: '' });
 });
 
 
