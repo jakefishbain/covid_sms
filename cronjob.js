@@ -54,19 +54,14 @@ const getAndSend = async () => {
 	});
 }
 
-const schedulerFactory = function() {
+const scheduler = function() {
   return {
     start: function() {
-			// '00 49 21 * * *'
       new CronJob(process.env.FREQUENCY, function() {
-				console.log('Running Send Notifications Worker for ');
-				// + moment().format()
-				// notificationsWorker.run();
 				getAndSend()
-				console.log('runnnnnin...')
       }, null, true, "America/Chicago");
     },
   };
 };
 
-module.exports = schedulerFactory();
+module.exports = scheduler();
