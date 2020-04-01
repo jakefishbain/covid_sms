@@ -1,0 +1,30 @@
+{
+  "name": "covid_sms",
+  "version": "1.0.0",
+  "description": "daily covid updates via sms",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "covid",
+    "covid19",
+    "covid_19",
+    "sms",
+    "text",
+    "corona",
+    "coronavirus",
+    "virus"
+  ],
+  "author": "jakefishbain",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "cron": "^1.8.2",
+    "custom-env": "^2.0.1",
+    "express": "^4.17.1",
+    "request": "^2.88.2",
+    "twilio": "^3.41.1"
+  }
+}
