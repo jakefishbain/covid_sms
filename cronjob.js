@@ -30,6 +30,9 @@ TOTALS:
 	POSITIVE: ${data.positive}
 	NEGATIVE: ${data.negative}
 	DEATHS: ${data.death}
+
+
+(data provided by ${process.env.SOURCE})
 	`
 }
 
