@@ -17,7 +17,7 @@ const options = {
 
 const buildBody = (data) => {
 	return `
-TODAY'S COVID19 STATS FOR ILLINOIS:
+${data.date} | COVID19 STATS FOR ILLINOIS:
 
 TODAY:
 	TESTS: ${data.totalTestResultsIncrease}
