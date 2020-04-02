@@ -24,7 +24,7 @@
     "cron": "^1.8.2",
     "custom-env": "^2.0.1",
     "express": "^4.17.1",
-    "request": "^2.88.2",
+    "node-fetch": "^2.6.0",
     "twilio": "^3.41.1"
   }
 }

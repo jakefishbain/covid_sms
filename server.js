@@ -23,8 +23,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 app.get("/sendit", async (req, res) =>  {
-  utils.getAndSend()
-  // res.json({ message: '' });
+  let foo = await utils.getAndSend()
+  res.json({ message:  foo});
 });
 
 

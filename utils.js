@@ -1,56 +1,82 @@
-const request = require('request');
+const fetch = require('node-fetch');
 require('custom-env').env();
 
 const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-const options = {
-	'method': 'GET',
-	'url': process.env.IL_API,
-	'headers': {}
-};
 
-const buildBody = (data) => {
+const buildBody = (state, us) => {
 	return `
-${data.date} | COVID19 STATS FOR ILLINOIS:
+${state.date}
+COVID19 STATS FOR ILLINOIS:
 
 TODAY:
-	TESTS: ${data.totalTestResultsIncrease}
-	POSITIVE: ${data.positiveIncrease}
-	NEGATIVE: ${data.negativeIncrease}
-	DEATHS: ${data.deathIncrease}
+	TESTS: ${state.totalTestResultsIncrease}
+	POSITIVE: ${state.positiveIncrease}
+	NEGATIVE: ${state.negativeIncrease}
+	DEATHS: ${state.deathIncrease}
 
 TOTALS:
-	TESTS: ${data.totalTestResults}
-	POSITIVE: ${data.positive}
-	NEGATIVE: ${data.negative}
-	DEATHS: ${data.death}
+	TESTS: ${state.totalTestResults}
+	POSITIVE: ${state.positive}
+	NEGATIVE: ${state.negative}
+	DEATHS: ${state.death}
+
+---------------------------
+
+COVID19 STATS FOR US:
+
+TODAY:
+	TESTS: ${us.totalTestResultsIncrease}
+	POSITIVE: ${us.positiveIncrease}
+	NEGATIVE: ${us.negativeIncrease}
+	DEATHS: ${us.deathIncrease}
+
+TOTALS:
+	TESTS: ${us.totalTestResults}
+	POSITIVE: ${us.positive}
+	NEGATIVE: ${us.negative}
+	DEATHS: ${us.death}
 
 
-(data provided by ${process.env.SOURCE})
-	`
+(src: ${process.env.SOURCE})
+`
+}
+
+async function getStateData() {
+	return fetch(process.env.IL_API)
+		.then(res => res.json())
+		.then(body => body[0])
+}
+
+async function getUSData() {
+	return fetch(process.env.US_API)
+		.then(res => res.json())
+		.then(body => body[0])
 }
 
 const getAndSend = async () => {
-	await request(options, function (error, response) {
-		if (error) throw new Error(error);
-		console.log('---gettin and sendin---')
-		let body = JSON.parse(response.body)[0]
+	console.log('---gettin and sendin---')
 
-		let messageBody = buildBody(body)
 
-		let nums = process.env.TO_NUMS.split(',')
+	let [state_data, us_data] = await Promise.all([
+		getStateData(),
+		getUSData()
+	])
 
-		nums.forEach(num => {
-		client.messages.create(
-			{
-				body: messageBody,
-				from: process.env.TWILIO_PHONE_NUMBER,
-				to: num
-			}
+	let messageBody = buildBody(state_data, us_data)
+	let nums = process.env.TO_NUMS.split(',')
+
+	nums.forEach(num => {
+	client.messages.create(
+		{
+			body: messageBody,
+			from: process.env.TWILIO_PHONE_NUMBER,
+			to: num
+		}
 		).then(message => console.log(message.sid));
-		});
 	});
-	return {message: 'success'}
+
+	return { state: state_data, us: us_data }
 }
 
 const logit = function(){console.log('123')};
