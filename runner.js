@@ -1,5 +1,10 @@
 #! /app/bin/node
-import { getAndSend } from './utils'
+const utils = require('./utils')
 
-getAndSend()
-process.exit();
+async function runner() {
+	await utils.getAndSend()
+}
+
+runner()
+
+// setTimeout(() => process.exit(), 5000)
