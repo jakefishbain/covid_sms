@@ -4,7 +4,7 @@ const cors = require("cors");
 const utils = require('./utils')
 
 
-require('./cronjob').start()
+// require('./cronjob').start()
 require('custom-env').env();
 
 const app = express();
